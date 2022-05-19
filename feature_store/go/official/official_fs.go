@@ -11,33 +11,40 @@ import (
 )
 
 func main() {
+
+	region := "asia-southeast1"
+	url := fmt.Sprintf("%s-aiplatform.googleapis.com:443", region)
+
 	ctx := context.Background()
 	c, err := aiplatform.NewFeaturestoreOnlineServingClient(ctx,
-		option.WithEndpoint("asia-southeast1-aiplatform.googleapis.com:443"))
+		option.WithEndpoint(url))
 	if err != nil {
-		// TODO: Handle error.
 		fmt.Println("error creating client")
 		fmt.Println(err)
 	}
 	defer c.Close()
 
+	projectId := "mitochondrion-project-344303"
+	fsName := "marketing_featurestore"
+	entityTypes := "users"
+	entityType := fmt.Sprintf("projects/%s/locations/%s/featurestores/%s/entityTypes/%s", projectId, region, fsName, entityTypes)
+
+	entityId := "UID2733"
+	featureNames := []string{"channel", "history"}
+
 	req := &aiplatformpb.ReadFeatureValuesRequest{
-		// TODO: Fill request struct fields.
-		// See https://pkg.go.dev/google.golang.org/genproto/googleapis/cloud/aiplatform/v1#ReadFeatureValuesRequest.
-		EntityType: "projects/832137092875/locations/asia-southeast1/featurestores/marketing_featurestore/entityTypes/users",
-		EntityId:   "UID2733",
+		EntityType: entityType,
+		EntityId:   entityId,
 		FeatureSelector: &aiplatformpb.FeatureSelector{
 			IdMatcher: &aiplatformpb.IdMatcher{
-				Ids: []string{"channel", "history"},
+				Ids: featureNames,
 			},
 		},
 	}
 	resp, err := c.ReadFeatureValues(ctx, req)
 	if err != nil {
-		// TODO: Handle error.
 		fmt.Println("error calling ReadFeatureValues")
 		fmt.Println(err)
 	}
-	// TODO: Use resp.
 	fmt.Println(resp)
 }
