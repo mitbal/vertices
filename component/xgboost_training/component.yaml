@@ -1,0 +1,20 @@
+name: XGBoost Training
+description: Trains an XGBoost model
+inputs:
+  - {name: training_set_features_path, type: {GcsPath: {data_type: CSV}}, description: 'Local or GCS path to the training dataset file'}
+  - {name: output_model_path_file, type: {GcsPath: {data_type: XGBoost model}}, description: 'Local or GCS path to the output of binary model'}
+outputs:
+  - {name: output_model_path_file, type: {GcsPath: {data_type: XGBoost model}}, description: 'Local or GCS path to the output of binary model'}
+metadata:
+  annotations:
+    author: M Iqbal Tawakal <mit.iqi@gmail.com>
+implementation:
+  container:
+    image: asia-southeast2-docker.pkg.dev/mitochondrion-project-344303/mitochondrion-components/xgboost-training:latest
+    command: [python, app/xgboost_training.py]
+    args: [
+      --training-set-features-path, {inputValue: training_set_features_path},
+      --output-model-path-file, {inputValue: output_model_path_file},
+
+      --output-model-path-file, {outputPath: output_model_path_file},
+    ]
