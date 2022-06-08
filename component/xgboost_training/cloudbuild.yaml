@@ -6,3 +6,6 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 
            'asia-southeast2-docker.pkg.dev/mitochondrion-project-344303/mitochondrion-components/xgboost-training:latest']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
