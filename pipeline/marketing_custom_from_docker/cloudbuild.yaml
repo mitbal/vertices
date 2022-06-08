@@ -5,14 +5,14 @@ steps:
 
   - name: python
     entrypoint: python
-    args: ['compile.py']
+    args: ['./pipeline/marketing_custom_from_docker/compile.py']
 
   - name: 'gcr.io/cloud-builders/gsutil'
-    args: ['cp', './marketing_custom_pipeline.json', 'gs://mitochondrion-bucket-sg/pipelines/']
+    args: ['cp', './pipeline/marketing_custom_from_docker/marketing_custom_pipeline.json', 'gs://mitochondrion-bucket-sg/pipelines/']
 
   - name: python
     entrypoint: python
-    args: ['trigger.py']
+    args: ['./pipeline/marketing_custom_from_docker/trigger.py']
 
 options:
   logging: CLOUD_LOGGING_ONLY
