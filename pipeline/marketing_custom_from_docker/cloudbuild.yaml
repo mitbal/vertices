@@ -7,6 +7,12 @@ steps:
     entrypoint: python
     args: ['compile.py']
 
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', './marketing_custom_pipeline.json', 'gs://mitochondrion-bucket-sg/pipelines/']
+
   - name: python
     entrypoint: python
     args: ['trigger.py']
+
+options:
+  logging: CLOUD_LOGGING_ONLY
