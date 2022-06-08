@@ -1,10 +1,9 @@
 name: XGBoost Training
 description: Trains an XGBoost model
 inputs:
-  - {name: dataset, type: 'typing.Annotated[kfp.v2.components.types.artifact_types.Dataset,
-    <class ''kfp.v2.components.types.type_annotations.InputAnnotation''>]'}
-  - {name: model_artifact, type: 'typing.Annotated[kfp.v2.components.types.artifact_types.Model,
-    <class ''kfp.v2.components.types.type_annotations.OutputAnnotation''>]'}
+- {name: dataset, type: Dataset}
+outputs:
+- {name: model_artifact, type: Model}
 metadata:
   annotations:
     author: M Iqbal Tawakal <mit.iqi@gmail.com>
@@ -13,6 +12,6 @@ implementation:
     image: asia-southeast2-docker.pkg.dev/mitochondrion-project-344303/mitochondrion-components/xgboost-training:latest
     command: [python, app/xgboost_training.py]
     args: [
-      --dataset, {inputValue: dataset},
-      --model-artifact, {inputValue: model_artifact},
+      --dataset, {inputPath: dataset},
+      --model-artifact, {outputPath: model_artifact},
     ]
