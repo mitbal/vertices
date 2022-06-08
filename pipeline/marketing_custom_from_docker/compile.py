@@ -70,7 +70,7 @@ def transform_feature(raw_dataset: Input[Dataset],
     transformed_df.to_csv(transformed_dataset.path, index=False)
 
 train_xgboost_model = kfp.components.load_component_from_url(
-    'https://raw.githubusercontent.com/mitochondrion/mitochondrion-components/master/xgboost_training/xgboost_training.yaml')
+    'https://raw.githubusercontent.com/mitbal/vertices/main/component/xgboost_training/component.yaml')
 
 @component(base_image='google/cloud-sdk:latest',
             packages_to_install=['pandas==1.3.4',
