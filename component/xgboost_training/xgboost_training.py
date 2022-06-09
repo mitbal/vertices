@@ -12,9 +12,9 @@ args = parser.parse_args()
 
 df = pd.read_csv(args.dataset)
 X = df.drop(['label'], axis=1).values
-y = X.pop('label').values
+y = df.pop('label').values
 
-model = XGBClassifier(n_estimator=100, max_depth=3, learning_rate=0.1, silent=True)
+model = XGBClassifier(n_estimator=10, max_depth=5, learning_rate=0.1, silent=True, seed=68)
 model.fit(X, y)
 
 with open(args.model_artifact, 'wb') as f:
