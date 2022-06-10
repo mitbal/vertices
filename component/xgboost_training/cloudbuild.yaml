@@ -1,4 +1,12 @@
 steps:
+  - name: python
+    entrypoint: pip
+    args: ['install', '-r', './component/xgboost_training/requirements.txt', '--user']
+
+  - name: python
+    entrypoint: pytest
+    args: ['./component/xgboost_training/test/test_component.py']
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
            'asia-southeast2-docker.pkg.dev/mitochondrion-project-344303/mitochondrion-components/xgboost-training:latest', './component/xgboost_training']

@@ -1,24 +1,21 @@
-def plus(x, y):
-    return x + y
+def test_fail():
 
-def test_plus():
-
-    assert plus(1, 1) == 2
+    assert 1 == 2 # this should fail
 
 def test_model():
 
     import subprocess
 
-    subprocess.call(['python', '../xgboost_training.py', '--dataset', 'testdata.csv', '--model-artifact', 'model.pkl'])
+    subprocess.call(['python', '../xgboost_training.py', '--dataset', './component/xgboost_training/test/testdata.csv', '--model-artifact', 'model.pkl'])
 
     import pandas as pd
     from xgboost.sklearn import XGBClassifier
 
     import pickle
 
-    model = pickle.load(open('model.pkl', 'rb'))
+    model = pickle.load(open('./component/xgboost_training/test/model.pkl', 'rb'))
 
-    df = pd.read_csv('testdata.csv')
+    df = pd.read_csv('./component/xgboost_training/test/testdata.csv')
     X = df.drop(['label'], axis=1).values
     y = df.pop('label').values
 
