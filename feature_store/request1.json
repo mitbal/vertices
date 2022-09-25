@@ -1,8 +1,0 @@
-{
-    "entityId": "UID0090",
-    "featureSelector": {
-        "idMatcher": {
-        "ids": ["channel", "history"]
-        }
-    }
-}
