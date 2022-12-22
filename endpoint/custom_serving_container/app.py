@@ -1,7 +1,7 @@
 import flask
 from flask import Flask, jsonify, request
 
-import pandas as pd
+import numpy as np
 import lightgbm as lgb
 
 def load_model():
@@ -17,11 +17,10 @@ def predict():
 
     data = request.get_json(force=True)
 
-    df = pd.json_normalize(data['instances'])
+    X = np.array(data['instances'])
+    pred = model.predict(X)
 
-    pred = model.predict(df.values)
-
-    return jsonify(pred)
+    return jsonify(pred.tolist())
 
 
 @app.route('/health', methods=['GET'])
