@@ -6,9 +6,9 @@ from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
 from google.api_core.client_options import ClientOptions
 
+from vertexai.language_models import TextGenerationModel
+
 region = 'asia-southeast1'
-model = 'chirp'
-# model = 'default'
 project_id = 'mitochondrion-project-344303'
 
 st.title('Konnyaku Penerjemah')
@@ -16,7 +16,10 @@ st.title('Konnyaku Penerjemah')
 language_list = ['id-ID', 'en-US', 'zh-CN', 'ja-JP', 'ar-EG', ]
 origin_language = st.sidebar.selectbox('Select Origin Language', language_list)
 destination_language = st.sidebar.selectbox('Select Destination Language', language_list)
+language_model_name = st.sidebar.selectbox('Select Translation Model', ['text-bison@002', 'text-unicorn@001'])
+transacription_model_name = st.sidebar.selectbox('Select Trancription Model', ['v1', 'chirp'])
 
+llm = TextGenerationModel.from_pretrained(language_model_name)
 
 def stt_v1(content, language):
     """Transcribe the given audio file."""
@@ -44,10 +47,7 @@ def stt_v1(content, language):
     return response
 
 
-def transcribe_chirp(
-    audio_file,
-    language
-):
+def transcribe_chirp(audio_file, language):
     """Transcribe an audio file using Chirp."""
     # Instantiates a client
     client = SpeechClient(
@@ -59,7 +59,7 @@ def transcribe_chirp(
     config = cloud_speech.RecognitionConfig(
         auto_decoding_config=cloud_speech.AutoDetectDecodingConfig(),
         language_codes=[language],
-        model=model
+        model='chirp'
     )
 
     request = cloud_speech.RecognizeRequest(
@@ -76,17 +76,14 @@ def transcribe_chirp(
 
     return response
 
-from vertexai.preview.language_models import TextGenerationModel
 
-llm = TextGenerationModel.from_pretrained('text-bison')
-
-audio_bytes = audio_recorder(pause_threshold=2.0, sample_rate=41_000)
+audio_bytes = audio_recorder(pause_threshold=2.0, sample_rate=44_100)
 if audio_bytes:
 
-    st.write('Running transcription')
-
-    # response = transcribe_chirp(audio_bytes, origin_language)
-    response = stt_v1(audio_bytes, origin_language)
+    if transacription_model_name == 'chirp':
+        response = transcribe_chirp(audio_bytes, origin_language)
+    else:
+        response = stt_v1(audio_bytes, origin_language)
     text = response.results[0].alternatives[0].transcript
 
     st.text_area('Transcription Result', text)
